@@ -23,6 +23,12 @@ Whenever you ask the user to choose something, **offer 2-3 labeled options (A / 
 
 **Know who holds the filesystem.** This loop leans on local files (a snapshot, an eval CSV, a run-log). If you (the assistant) can write files, offer to create them. If you are running inside a chat UI or a tool with no file access (ChatGPT, Clay, a console), you cannot write to the user's disk: emit the exact CSV or markdown text in your reply and have the user save it in their own editor. The artifacts are local files the user owns either way; only who types them changes. Never promise to "create a file" in an environment where you cannot.
 
+## Do not modify this skill for a specific case
+
+This skill is general on purpose, and it is shared across people and projects. While you run it, do NOT edit the skill, its references, or its examples to fit the user's specific prompt, classifier, labels, company, or dataset. That would overfit a shared tool to one situation. Per-case learnings belong in the user's own files: their prompt snapshots, their run-log, and their local notes or memory. Tell the user to save those locally; do not bake them in here.
+
+If you think you have found a genuinely general improvement to the method itself (a new failure mode, a better check, a clearer explanation), mention it to the user, but do not apply it here. General improvements belong in a fork or a pull request to the upstream repo, where they can be reviewed on their own merits. Treat this skill as read-only unless the user tells you that you are working inside a fork of the repo. If the user asks you to change the skill for their specific case, explain this and offer to fork instead.
+
 ## Phase -1: Environment questionnaire (always, first thing)
 
 Before any baseline, establish the environment. Read `references/01-environment-questionnaire.md` and ask the five questions there:

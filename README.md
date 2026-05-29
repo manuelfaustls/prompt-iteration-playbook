@@ -11,6 +11,37 @@ You can use it two ways:
 
 ---
 
+## Quickstart
+
+### Install (as a Claude Code skill)
+
+```bash
+git clone https://github.com/manuelfaustls/prompt-iteration-playbook.git
+cp -r prompt-iteration-playbook ~/.claude/skills/optimize-prompt-portable
+```
+
+Reload Claude Code and you are set. (If you do not already have a skill named `optimize-prompt`, you can name the folder `optimize-prompt` instead, for a shorter trigger.)
+
+### Use it
+
+Say what you want, in English or Spanish:
+
+> help me improve this classifier prompt, I have about 30 labeled examples
+
+or invoke it explicitly with `/optimize-prompt-portable`.
+
+It asks five quick questions about your setup (where the prompt lives, where your eval set is, which model, who labeled it, where to log the runs), confirms what it understood, then walks you through one measured change at a time. To skip the questions, declare the setup up front:
+
+```
+/optimize-prompt-portable env=clay model=gpt-4o-mini eval=clay-table labeler=human
+```
+
+### Not using Claude Code?
+
+Iterating a prompt in Clay, ChatGPT, or a notebook? Open [`SKILL.md`](SKILL.md) and follow the phases yourself; it is written to be run by a person, and [`references/environments/`](references/environments/) has the mechanics for your tool.
+
+---
+
 ## The one idea
 
 **Every change to a prompt is a hypothesis. The eval set is how you try to falsify it.**
@@ -139,25 +170,10 @@ prompt-iteration-playbook/
 
 ---
 
-## Install as a Claude Code skill
-
-Copy this folder into your skills directory (commonly `~/.claude/skills/`):
-
-```bash
-git clone https://github.com/manuelfaustls/prompt-iteration-playbook.git
-cp -r prompt-iteration-playbook ~/.claude/skills/optimize-prompt-portable
-```
-
-The skill triggers on phrases like "iterate this prompt", "improve the classifier", "tune the filter", in English or Spanish, or explicitly with `/optimize-prompt-portable`. If you do not already have a skill named `optimize-prompt`, you can rename the folder to `optimize-prompt` for a shorter trigger.
-
-Using it somewhere without skills (Clay, ChatGPT, a notebook)? Just read `SKILL.md` and run the loop yourself. It is written to be followed by a person, not only an agent.
-
----
-
 ## Provenance and contributing
 
 This playbook generalizes a loop proven on real classifier and qualification prompts that moved from mediocre to near-perfect accuracy on their clean eval sets over a handful of measured, logged iterations (sample sizes in the dozens; the numbers were fitted to the eval rows and caveated as such, per the rules this repo preaches). The environment-specific guidance was researched against vendor docs current as of May 2026; where a mechanic could not be verified, the relevant file says so and tells the playbook to ask the user instead of assuming.
 
-Lessons accumulate in [`references/04-anamnese-protocol.md`](references/04-anamnese-protocol.md) and in each environment file. Pull requests with new environments, corrected mechanics, or method lessons are welcome.
+Improvements happen through forks and pull requests, and they stay general and vendor-agnostic: a new environment, a corrected mechanic, a method lesson. Method lessons live in [`references/04-anamnese-protocol.md`](references/04-anamnese-protocol.md). Please do not bake a specific prompt, dataset, or company into the skill: per-case learnings belong in your own run-log and notes, not in here. If you are adapting the skill to your own situation, fork it; do not edit your installed copy in place during a task.
 
 *As of 2026-05-29.*

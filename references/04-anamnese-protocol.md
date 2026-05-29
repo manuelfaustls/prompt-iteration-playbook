@@ -1,0 +1,67 @@
+# The regression protocol and the anamnese
+
+Not every change works. The discipline is in what you do when a change fails, because the tempting move (quietly try something else and forget the failure) throws away the most useful information you have.
+
+## The regression protocol
+
+After a change, you are in one of three states:
+
+1. **Clear gain, no regression.** Accuracy went up by more than the noise floor and no previously-correct row broke. Keep the change, freeze the version, log the lift. Move on.
+
+2. **Regression.** A previously-correct row became wrong. A regression is not "probably noise" until a re-run confirms it: re-run the same version once and see if the row flips back. If it stays wrong, it is a real regression caused by your change.
+
+3. **No clear gain.** The delta is at or below the noise floor. The change did nothing measurable.
+
+For states 2 and 3, run the protocol:
+
+- **Make at least two more attempts** to achieve the change's intent a different way. Reword the rule. Try an example-anchor pair instead of a rule. Narrow the rule's scope so it stops touching rows it should not. Each attempt is still one isolated change, measured and logged.
+- **If it still does not resolve after those attempts, stop and write an anamnese** (below). Do not silently move on to something else, and do not keep grinding past the point of learning. Report the anamnese to the user with options, and let them decide.
+
+The name "anamnese" is borrowed from medicine: the structured case history a clinician takes before a diagnosis. Here it is the structured history of a failed change, written so the user (or future-you) can decide what to do without re-running everything.
+
+## The anamnese template
+
+```
+ANAMNESE: <one-line description of the change you were trying to make>
+
+Goal
+  What the change was supposed to fix, and which eval rows it targeted.
+
+Attempts (one block each, all measured and logged)
+  1. <what you tried> -> <accuracy / which rows moved> -> <why it failed>
+  2. <what you tried> -> <result> -> <why it failed>
+  3. <what you tried> -> <result> -> <why it failed>
+
+What the failures have in common
+  The pattern across attempts. (e.g. "every wording that fixes the senior-IC
+  titles also breaks the founder titles; the two share no clean textual signal.")
+
+Hypotheses for why it resists
+  Your best guesses. (e.g. "the distinction may not be decidable from the title
+  alone; it might be a needs_context case mislabeled as clean", or "the eval
+  labels for these rows may themselves be inconsistent".)
+
+Options for the user
+  A. <e.g. accept the current version; the gain is not worth the regression risk>
+  B. <e.g. re-categorize the stubborn rows as needs_context and stop trying to win them>
+  C. <e.g. move this distinction out of the prompt into a deterministic check upstream>
+  D. <e.g. expand the eval set with more of these cases and revisit>
+
+Recommendation
+  Which option you would pick and why, in one or two sentences.
+```
+
+## Why this is worth the few minutes it takes
+
+- It converts a frustrating dead end into a decision the user can actually make.
+- It prevents the same failed approach from being tried again three weeks later.
+- The "what the failures have in common" line is often the real finding: it frequently reveals that the task is ambiguous, the labels are fuzzy, or the distinction belongs in code rather than in the prompt. That is more valuable than the change you were originally chasing.
+
+## Method lessons accumulate here
+
+When the *method* (not a specific prompt) teaches you something during a run , a new failure mode, a better check, a wrong assumption , append it below. This is how the playbook sharpens with use. Pull requests adding lessons are welcome.
+
+- A bare rule added to a prompt often misses a subtle distinction; an example-anchor pair (a positive case plus the contrasting negative case) frequently lands what wording alone cannot.
+- Sector or category exclusion belongs upstream (a data filter, a formula, a code check), not inside the classifier prompt. Pushing exact, rule-based exclusions into the model's prose makes them less reliable, not more.
+- A flip that reproduces across two identical runs of the new version is a real effect, not run-to-run noise. But reproducible is not the same as caused-by-your-change: attribute it to the change only if the same input produced the correct (or old) output under the previous version, which is exactly what isolation plus the regression scan establish. A stable flip with no causal link to the change may be pre-existing behavior, not something your change introduced. When a change does cause an unintended flip, tightening the rule's scope usually fixes it.
+- When an input genuinely needs context the input alone lacks, re-categorize it as `needs_context`; do not force a rule to guess it. A rule that wins a `needs_context` row is overfitting.

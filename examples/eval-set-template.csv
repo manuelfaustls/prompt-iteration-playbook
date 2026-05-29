@@ -1,0 +1,27 @@
+input,expected_label,labeler,categoria,notes
+Founder & CEO,decision_maker,human:manuel,clean,Clear owner of the buying decision.
+Owner,decision_maker,human:manuel,clean,Owns the business and the budget.
+Co-Founder,decision_maker,human:manuel,clean,Founding authority.
+Managing Director,decision_maker,human:manuel,clean,Top of a small org.
+Chief Marketing Officer,decision_maker,human:manuel,clean,C-level over the buying function.
+VP of Marketing,decision_maker,human:manuel,clean,Head of the buying function.
+Head of Growth,decision_maker,human:manuel,clean,Owns growth tooling at a small retailer.
+Director of E-commerce,decision_maker,human:manuel,clean,Director of the buying function.
+Head of Digital,decision_maker,human:manuel,clean,Heads the relevant function.
+Marketing Manager,influencer,human:manuel,clean,Shapes the decision, does not sign off alone.
+E-commerce Manager,influencer,human:manuel,clean,Manager in the buying center.
+CRM Manager,influencer,human:manuel,clean,Operational manager, influences.
+Senior Growth Analyst,influencer,human:manuel,clean,Senior-sounding but an individual contributor. v1.1 target.
+Senior Performance Marketer,influencer,human:manuel,clean,Senior IC, no sign-off authority. v1.1 target.
+Growth Lead,influencer,human:manuel,clean,Lead, not a head; influences. v1.1 target.
+Paid Media Manager,influencer,human:manuel,clean,IC-level manager; the genuinely borderline case v1.1 still misses.
+Marketing Intern,not_relevant,human:manuel,clean,Too junior to influence.
+Junior Graphic Designer,not_relevant,human:manuel,clean,Outside the buying center, junior.
+Warehouse Associate,not_relevant,human:manuel,clean,Unrelated function.
+Customer Support Agent,not_relevant,human:manuel,clean,Unrelated function.
+Backend Software Engineer,not_relevant,human:manuel,clean,Unrelated function.
+Staff Accountant,not_relevant,human:manuel,clean,Unrelated function.
+Sales Director,decision_maker,ai:gpt-4o-mini,clean,AI-labeled and not yet human-reviewed; does NOT count toward the score until a human confirms it.
+Manager,,human:manuel,needs_context,Manager of what? The title alone cannot be decided. expected_label left blank on purpose.
+Director,,human:manuel,needs_context,Director of what function? Insufficient from the input alone.
+Acme Retail Co,,human:manuel,out_of_scope,A company name, not a person title. Remove from the set; not a hit or a miss.

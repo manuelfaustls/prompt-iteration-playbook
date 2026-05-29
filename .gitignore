@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Your real eval data is yours; do not commit it to a public fork by accident.
+# The examples/ files in this repo are synthetic. If you keep your own gabarito
+# or run-log inside a clone, name them with a *.local.csv suffix and they stay private.
+*.local.csv
+/my-evals/
+/private/
